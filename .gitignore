@@ -1,1 +1,9 @@
 .vscode/
+.idea/
+*.log
+*.tmp
+.venv/
+__pycache__/
+.ruff_cache/
+node_modules/
+helpers/
