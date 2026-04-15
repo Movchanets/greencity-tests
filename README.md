@@ -78,7 +78,6 @@ python -m unittest discover tests -v
 
 ## Обмеження
 
-- ❌ Page Object Pattern (PO)
 - ❌ pytest
 - ❌ Сторонні тестові фреймворки
 
