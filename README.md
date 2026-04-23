@@ -1,47 +1,47 @@
 # GreenCity Events Page Automated Tests
 
-Автоматизовані тести для сторінки подій GreenCity.
+Автоматизовані UI-тести для сторінки подій GreenCity на Selenium + Pytest.
 
-🔗 **Сторінка для тестування:** https://www.greencity.cx.ua/#/greenCity/events
+🔗 **Сторінка для тестування:** <https://www.greencity.cx.ua/#/greenCity/events>
 
 ## Опис проєкту
 
-Цей репозиторій містить автоматизовані тести для перевірки функціональності сторінки подій GreenCity. Тести реалізовані на Python з використанням Selenium WebDriver та стандартного модуля unittest.
+Проєкт переведено з `unittest` на `pytest` за структурним підходом з репозиторію `/d/code/SeleniumPytestAllure`:
 
-### Покриті тест-кейси
-
-| Тест | Опис |
-|---|---|
-| TC-01 | Перевірка відображення списку подій і відкриття картки |
-| TC-02 | Перевірка роботи фільтрів подій |
-| TC-05 | Перевірка помилок валідації при створенні події без обов'язкових даних |
-
-### Додаткові тести (parameterized-style)
-
-| Тест | Опис |
-|---|---|
-| test_page_title_contains_events_text | Перевірка заголовку сторінки |
-| test_events_page_has_filter_elements | Перевірка наявності елементів фільтрації |
-| test_event_card_has_required_data | Перевірка наявності обов'язкових даних в картках |
+- Page Object + Component Object патерн
+- `tests/conftest.py` для setup/teardown WebDriver
+- централізована конфігурація через `data/config.py` і `.env`
 
 ## Структура
 
-```
-greencity-tests/
-├── README.md
-├── requirements.txt
-├── test-cases/
-│   └── events-page-tests.md
-└── tests/
-    ├── test_events_page.py
-    └── utils.py
+```text
+TAQC/
+|-- data/
+|   |-- .env.example
+|   `-- config.py
+|-- pages/
+|   |-- base_page.py
+|   |-- eco_news_page.py
+|   |-- events_page.py
+|   `-- components/
+|       |-- base_component.py
+|       `-- event_card_components.py
+|-- tests/
+|   |-- conftest.py
+|   |-- test_events_page.py
+|   `-- screenshots/
+|-- test-cases/
+|   `-- events-page-tests.md
+|-- pytest.ini
+|-- requirements.txt
+`-- README.md
 ```
 
 ## Вимоги
 
 - Python 3.8+
-- Chrome браузер
-- ChromeDriver (автоматично встановлюється через selenium-manager)
+- Google Chrome
+- Selenium Manager / сумісний ChromeDriver
 
 ## Встановлення
 
@@ -49,38 +49,43 @@ greencity-tests/
 pip install -r requirements.txt
 ```
 
-## Інструкція запуску тестів
+## Конфігурація
 
-Запуск всіх тестів:
+1. Скопіюйте `data/.env.example` у `data/.env`.
+2. За потреби змініть значення:
 
-```bash
-python -m unittest discover tests
+```env
+BASE_UI_URL=https://www.greencity.cx.ua/#/greenCity/events
+IMPLICIT_WAIT_TIMEOUT=3
+EXPLICIT_WAIT_TIMEOUT=15
+BROWSER_LANG=uk-UA
+HEADLESS_MODE=False
 ```
 
-Запуск конкретного файлу тестів:
+## Запуск тестів
+
+Запуск усіх тестів:
 
 ```bash
-python -m unittest tests.test_events_page
+pytest
 ```
 
-Запуск з деталізованим виводом:
+Запуск конкретного модуля:
 
 ```bash
-python -m unittest discover tests -v
+pytest tests/test_events_page.py
 ```
 
-## Технології
+Запуск конкретного тесту:
 
-- **Python** — мова програмування
-- **Selenium WebDriver** — автоматизація браузера
-- **unittest** — стандартний тестовий фреймворк Python
-- **WebDriverWait** — явні очікування
+```bash
+pytest tests/test_events_page.py::test_TC01_open_event_and_check_details
+```
 
-## Обмеження
+## Поточне покриття
 
-- ❌ pytest
-- ❌ Сторонні тестові фреймворки
-
-## Автор
-
-Мовчанець В'ячеслав Романович
+| Тест | Опис |
+| --- | --- |
+| TC-01 | Відкриття події зі списку і перевірка деталей |
+| TC-02 | Перевірка фільтрації та скидання фільтрів |
+| TC-04 | Негативний сценарій: майбутні події + дата в минулому |
