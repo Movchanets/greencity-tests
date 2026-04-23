@@ -4,6 +4,7 @@ import pytest
 from selenium import webdriver
 
 from data.config import Config
+from pages.base_page import BasePage
 
 
 @pytest.fixture(scope="function")
@@ -28,3 +29,10 @@ def init_driver(request):
     screenshot_name = f"{request.node.name}.png"
     driver.save_screenshot(str(screenshots_dir / screenshot_name))
     driver.quit()
+
+
+@pytest.fixture(scope="function")
+def home_page(init_driver):
+    page = BasePage(init_driver)
+    page.open(Config.BASE_UI_URL)
+    return page

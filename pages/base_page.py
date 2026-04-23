@@ -1,11 +1,15 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+
+from data.config import Config
+from pages.components.signin_modal import SigninModal
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class BasePage:
     sign_in_button_locator = (By.CSS_SELECTOR, ".header_navigation-menu-right-list > .header_sign-in-link")
+    sign_in_modal_locator = (By.XPATH, "//app-auth-modal")
     language_switcher = (By.XPATH, "//ul[@aria-label='language switcher']")
     language_en_option = (By.XPATH, ".//span[contains(text(), 'En')]")
     language_ua_option = (By.XPATH, ".//span[contains(text(), 'Uk')]")
@@ -15,6 +19,9 @@ class BasePage:
     def __init__(self, driver, timeout=15):
         self.driver = driver
         self.timeout = timeout
+
+    def open(self, url=None):
+        self.driver.get(url or Config.BASE_UI_URL)
 
     def wait(self, timeout=None):
         return WebDriverWait(self.driver, timeout or self.timeout)
@@ -42,9 +49,13 @@ class BasePage:
     def get_sign_in_button(self):
         return self.wait_for_clickable(self.sign_in_button_locator)
 
+    def get_sign_in_modal(self):
+        return self.wait_for_visible(self.sign_in_modal_locator)
+
     def click_sign_in(self):
         sign_in_button = self.get_sign_in_button()
         sign_in_button.click()
+        return SigninModal(self.get_sign_in_modal())
 
     def get_language_switcher(self):
         return self.wait_for_clickable(self.language_switcher)
