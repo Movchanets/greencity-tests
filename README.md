@@ -70,6 +70,20 @@ HEADLESS_MODE=False
 pytest
 ```
 
+Allure results генеруються автоматично в `allure-results/` через `pytest.ini`.
+
+Перегляд звіту:
+
+```bash
+allure serve allure-results
+```
+
+Або збереження HTML-звіту:
+
+```bash
+allure generate allure-results -o allure-report --clean
+```
+
 Запуск конкретного модуля:
 
 ```bash

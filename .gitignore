@@ -8,3 +8,5 @@ __pycache__/
 node_modules/
 helpers/
 data/.env
+allure-results/
+allure-report/
