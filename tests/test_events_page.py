@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from data.config import Config
@@ -12,50 +13,73 @@ def events_page(init_driver):
     return page
 
 
+@allure.feature("Events page")
+@allure.story("Open event details")
+@allure.title("TC-01 Open event and check details")
 def test_TC01_open_event_and_check_details(events_page):
     """TC-01: Відкрити подію зі списку і перевірити деталі."""
-
-    cards = events_page.get_cards()
-    assert len(cards) > 0, "No event cards found on the page"
-    print(f"  Found {len(cards)} event cards")
+    with allure.step("Check events page loaded with event cards"):
+        cards = events_page.get_cards()
+    with allure.step("Verify event cards are displayed"):
+        assert len(cards) > 0, "No event cards found on the page"
+    
+    with allure.step("Print event card count"):
+        print(f"  Found {len(cards)} event cards")
 
     first_card = cards[0]
     card_title = first_card.get_name()
-    print(f"  First event title: '{card_title}'")
+    with allure.step("Print first event title"):
+        print(f"  First event title: '{card_title}'")
     assert len(card_title.strip()) > 0, "Event title is empty"
 
     first_card.click_more()
     detail_title = events_page.get_detail_title_text()
-    print(f"  Detail page title: '{detail_title}'")
+    with allure.step("Print detail page title"):
+        print(f"  Detail page title: '{detail_title}'")
     assert len(detail_title.strip()) > 0, "Detail page title is empty"
 
     has_location = events_page.page_has_location_hint()
-    print(f"  Has location info: {has_location}")
+    with allure.step("Print location info"):
+        print(f"  Has location info: {has_location}")
 
 
+@allure.feature("Events page")
+@allure.story("Filter events")
+@allure.title("TC-02 Filter and reset events")
 def test_TC02_filter_and_reset(events_page):
     """TC-02: Застосувати фільтр і скинути його."""
-
-    initial_count = events_page.get_cards_count()
-    print(f"  Initial events count: {initial_count}")
+    with allure.step("Check events page loaded with event cards"):
+        cards = events_page.get_cards()
+    with allure.step("Verify event cards are displayed"):
+        assert len(cards) > 0, "No event cards found on the page"
+    with allure.step("Print initial event card count"):
+        initial_count = events_page.get_cards_count()
+        print(f"  Initial events count: {initial_count}")
 
     mat_selects = events_page.get_filter_selects()
     assert len(mat_selects) > 0, "No filter dropdowns found"
-    print(f"  Found {len(mat_selects)} filter dropdowns")
+    with allure.step("Print filter dropdown count"):
+        print(f"  Found {len(mat_selects)} filter dropdowns")
+    with allure.step("Open first filter dropdown and select an option"):
+        events_page.open_filter_select(0)
 
-    events_page.open_filter_select(0)
-
-    options = events_page.get_open_options()
-    assert len(options) > 0, "No filter options appeared"
-    print(f"  Found {len(options)} filter options")
-
-    first_option_text = options[0].text.strip()
-    print(f"  Selecting option: '{first_option_text}'")
-    events_page.select_option_by_text(first_option_text)
-
-    events_page.wait_until_loaded()
-    filtered_cards = events_page.get_card_elements()
-    print(f"  Events after filter: {len(filtered_cards)}")
+    with allure.step("Get filter options and select the first one"):
+        options = events_page.get_open_options()
+    with allure.step("Verify filter options are displayed"):
+        assert len(options) > 0, "No filter options appeared"
+    with allure.step("Print filter options count and select the first option"):
+        print(f"  Found {len(options)} filter options")
+    with allure.step("Select the first filter option"):
+        first_option_text = options[0].text.strip()
+    with allure.step("Print selected option"):
+        print(f"  Selecting option: '{first_option_text}'")
+    with allure.step("Apply filter by selecting the option"):
+        events_page.select_option_by_text(first_option_text)
+    with allure.step("Wait for events to be filtered and print resulting event count"):
+        events_page.wait_until_loaded()
+    with allure.step("Print filtered event count"):
+        filtered_cards = events_page.get_card_elements()
+        print(f"  Events after filter: {len(filtered_cards)}")
 
     events_page.close_dropdown()
     events_page.click_reset()
@@ -66,6 +90,9 @@ def test_TC02_filter_and_reset(events_page):
     assert len(final_cards) > 0, "No event cards found after resetting filters"
 
 
+@allure.feature("Events page")
+@allure.story("Negative filtering")
+@allure.title("TC-04 Filter with no results")
 def test_TC04_filter_no_results(events_page):
     """TC-04: Негативний тест — Майбутні події + дата в минулому = 0 результатів."""
 

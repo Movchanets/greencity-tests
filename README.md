@@ -70,6 +70,20 @@ HEADLESS_MODE=False
 pytest
 ```
 
+Allure results генеруються автоматично в `allure-results/` через `pytest.ini`.
+
+Перегляд звіту:
+
+```bash
+allure serve allure-results
+```
+
+Або збереження HTML-звіту:
+
+```bash
+allure generate allure-results -o allure-report --clean
+```
+
 Запуск конкретного модуля:
 
 ```bash
@@ -89,3 +103,5 @@ pytest tests/test_events_page.py::test_TC01_open_event_and_check_details
 | TC-01 | Відкриття події зі списку і перевірка деталей |
 | TC-02 | Перевірка фільтрації та скидання фільтрів |
 | TC-04 | Негативний сценарій: майбутні події + дата в минулому |
+| Header | Перемикання мови та навігація по шапці |
+| Login modal | Успішний та негативний сценарії авторизації |
