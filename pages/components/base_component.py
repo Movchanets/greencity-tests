@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,18 +14,23 @@ class BaseComponent:
     def _get_wait(self, timeout=10):
         return WebDriverWait(self.driver, timeout)
 
+    @allure.step("Find element inside component")
     def find_element(self, by=By.XPATH, value=None):
         return self.node.find_element(by, value)
 
+    @allure.step("Find elements inside component")
     def find_elements(self, by=By.XPATH, value=None):
         return self.node.find_elements(by, value)
 
+    @allure.step("Wait for component element presence")
     def wait_for_presence(self, locator, timeout=10):
         return self._get_wait(timeout).until(EC.presence_of_element_located(locator))
 
+    @allure.step("Wait for component element visibility")
     def wait_for_visible(self, locator, timeout=10):
         return self._get_wait(timeout).until(EC.visibility_of_element_located(locator))
 
+    @allure.step("Scroll to component element")
     def scroll_to(self, element):
         self.driver.execute_script(
             "arguments[0].scrollIntoView({block: 'center'});", element

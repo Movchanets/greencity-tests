@@ -55,14 +55,18 @@ class SigninModal(BaseComponent):
     def is_displayed(self):
         return self.node.is_displayed()
 
+    @allure.step("Get email validation error message")
     def email_error_message(self):
         return self.find_element(*self.email_error).text
 
+    @allure.step("Get password validation error message")
     def password_error_message(self):
         return self.find_element(*self.password_error).text
 
+    @allure.step("Check email validation error is displayed")
     def email_error_is_displayed(self):
         return self.find_element(*self.email_error).is_displayed()
 
+    @allure.step("Check password validation error is displayed")
     def password_error_is_displayed(self):
         return self.find_element(*self.password_error).is_displayed()
