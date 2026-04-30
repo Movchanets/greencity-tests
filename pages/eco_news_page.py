@@ -1,3 +1,4 @@
+import allure
 from .base_page import BasePage
 from selenium.webdriver.common.by import By
 
@@ -8,3 +9,7 @@ class EcoNewsPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+
+    @allure.step("Get eco news main header")
+    def get_main_header(self):
+        return self.wait_for_visible(self.main_header_locator)

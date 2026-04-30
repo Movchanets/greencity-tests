@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -14,28 +15,35 @@ class SigninModal(BaseComponent):
     email_error = (By.ID, "email-err-msg")
     password_error = (By.ID, "pass-err-msg")
 
+    @allure.step("Enter email")
     def enter_email(self, email):
         email_field = self.find_element(*self.email)
         email_field.clear()
         email_field.send_keys(email)
 
+    @allure.step("Enter password")
     def enter_password(self, password):
         password_field = self.find_element(*self.password)
         password_field.clear()
         password_field.send_keys(password)
 
+    @allure.step("Click forgot password")
     def click_forgot_password(self):
         self.find_element(*self.forgot_password).click()
 
+    @allure.step("Click sign in in modal")
     def click_sign_in(self):
         self.find_element(*self.sign_in_button).click()
 
+    @allure.step("Click sign up in modal")
     def click_sign_up(self):
         self.find_element(*self.sign_up_button).click()
 
+    @allure.step("Close sign in modal")
     def close(self):
         self.find_element(*self.close_button).click()
 
+    @allure.step("Wait until sign in modal disappears")
     def wait_until_it_disappears(self, timeout=10):
         try:
             self._get_wait(timeout).until(EC.invisibility_of_element_located(self.email))
@@ -43,6 +51,7 @@ class SigninModal(BaseComponent):
         except Exception:
             return False
 
+    @allure.step("Check sign in modal is displayed")
     def is_displayed(self):
         return self.node.is_displayed()
 
